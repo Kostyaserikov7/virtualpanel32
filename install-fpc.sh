@@ -137,34 +137,27 @@ fi
 
 #6
 if ! sudo apt install -y unzip ; then
-  echo -e "${start_process_line}\nПроизошла ошибка при установке Unzip. (6/${commands})\n${end_process_line}"
-  exit 2
+    echo -e "${start_process_line}\nПроизошла ошибка при установке Unzip. (6/${commands})\n${end_process_line}"
+    exit 2
 fi
 
-
 clear
-echo -e "$start_process_line\nУстанавливаю Python...\n$end_process_line"
+echo -e "$start_process_line\nПроверяю наличие Python 3.11...\n$end_process_line"
 
+#7 - Проверка Python вместо установки
+if ! command -v python3.11 &> /dev/null; then
+    echo -e "${start_process_line}\nPython 3.11 не найден! Установите его вручную. (7/${commands})\n${end_process_line}"
+    exit 2
+fi
 
-#7
-case $distro_version in
-  "24.04" | "24.10")
-    if ! sudo apt install -y python3.12 python3.12-dev python3.12-gdbm python3.12-venv ; then
-      echo -e "${start_process_line}\nПроизошла ошибка при установке Python. (7/${commands})\n${end_process_line}"
-      exit 2
-    fi
-    ;;
-  *)
-    if ! sudo apt install -y python3.11 python3.11-dev python3.11-gdbm python3.11-venv ; then
-      echo -e "${start_process_line}\nПроизошла ошибка при установке Python. (7/${commands})\n${end_process_line}"
-      exit 2
-    fi
-    ;;
-esac
+# Проверка необходимых модулей
+if ! python3.11 -c "import ssl, gdbm, venv" &> /dev/null; then
+    echo -e "${start_process_line}\nНе хватает модулей Python. Установите: sudo apt install python3.11-dev python3.11-gdbm python3.11-venv (7/${commands})\n${end_process_line}"
+    exit 2
+fi
 
 clear
 echo -e "$start_process_line\nСоздаю пользователя и устанавливаю/обновляю Pip...\n$end_process_line"
-
 #8
 if ! sudo useradd -m $username ; then
   echo -e "${start_process_line}\nПроизошла ошибка при создании пользователя. (8/${commands})\n${end_process_line}"
