@@ -1,8 +1,10 @@
 {
   "status": true,
   "keys": [
-    { "key": "AAA-111", "expire": 1750000000 },
-    { "key": "BBB-222", "expire": 1760000000 },
-    { "key": "CCC-333", "expire": 1770000000 }
+    {
+      "key": "847jeic72hu5",
+      "expire": 1767225600
+    }
   ]
 }
+
